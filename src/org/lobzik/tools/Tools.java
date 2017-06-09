@@ -587,7 +587,7 @@ public class Tools {
         BufferedReader br;
         String line;
         StringBuilder sb = new StringBuilder();
-        
+
         try (InputStream is = url.openStream()) {
 
             br = new BufferedReader(new InputStreamReader(is));
@@ -597,5 +597,39 @@ public class Tools {
             }
         }
         return sb.toString();
+    }
+
+    public static String maskPhone(String unmasked, String mask) {
+        if (unmasked == null || mask == null) {
+            return null;
+        }
+        if (unmasked.length() == 0) {
+            return "";
+        }
+        StringBuilder masked = new StringBuilder();
+        int phi = 0;
+        for (int i = 0; i < mask.length(); i++) {
+            char m = mask.charAt(i);
+            char p = ' ';
+            if (phi < unmasked.length()) {
+                p = unmasked.charAt(phi);
+            }
+            if (m == p || m == '_') {
+                masked.append(p);
+                phi++;
+            } else {
+                masked.append(m);
+            }
+
+        }
+        return masked.toString();
+    }
+
+    public static String unmaskPhone(String masked) {
+        if (masked == null) {
+            return null;
+        }
+        String unmasked = masked.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll("\\-", "").replaceAll(" ", "");
+        return unmasked;
     }
 }
